@@ -6,12 +6,12 @@ export function useAuth() {
   const [loading, setLoading] = useState(true);
 
   const login = async (email: string, password: string) => {
-    const res = await api.post("/login", { email, password });
+    const res = await api.post("/user/login", { email, password });
     setUser(res.data.user);
   };
 
-  const signup = async (email: string, password: string) => {
-    const res = await api.post("/signup", { email, password });
+  const signup = async (fullName: string, email: string, password: string) => {
+    const res = await api.post("/user/register", { fullName, email, password });
     setUser(res.data.user);
   };
 

@@ -9,6 +9,7 @@ import {
   Keyboard,
   TouchableOpacity,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import { useState } from "react";
 import { useRouter } from "expo-router";
@@ -21,10 +22,26 @@ export default function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const submit = async () => {
-    // await login(email, password);
-    router.replace("/main/groups");
+    if (!email || !password) return;
+
+    try {
+      setLoading(true);
+      setError(null);
+
+      await login(email, password);
+      router.replace("/main/groups");
+    } catch (err: any) {
+      setError(
+        err?.response?.data?.message ||
+          "Invalid email or password"
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -42,8 +59,6 @@ export default function Login() {
 
           {/* 🧾 Form */}
           <View style={styles.form}>
-            
-
             <TextInput
               placeholder="Email"
               value={email}
@@ -61,16 +76,37 @@ export default function Login() {
               style={styles.input}
             />
 
-            <TouchableOpacity style={styles.button} onPress={submit}>
-              <Text style={styles.buttonText}>Login</Text>
+            {/* ❌ ERROR MESSAGE */}
+            {error && <Text style={styles.error}>{error}</Text>}
+
+            {/* ✅ LOGIN BUTTON */}
+            <TouchableOpacity
+              style={[
+                styles.button,
+                loading && { opacity: 0.7 },
+              ]}
+              onPress={submit}
+              disabled={loading}
+            >
+              {loading ? (
+                <ActivityIndicator color="#fff" />
+              ) : (
+                <Text style={styles.buttonText}>Login</Text>
+              )}
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => router.push("/auth/signup")}>
-            <Text style={styles.switchText}>
+            {/* 🔁 SWITCH TO SIGNUP */}
+            <TouchableOpacity
+              onPress={() => router.push("/auth/signup")}
+              disabled={loading}
+            >
+              <Text style={styles.switchText}>
                 Don’t have an account?{" "}
                 <Text style={styles.switchLink}>Sign up</Text>
-            </Text>
+              </Text>
             </TouchableOpacity>
+
+            {/* 📜 FOOTER */}
             <Text style={styles.footerText}>
               By continuing you agree to our{" "}
               <Text style={styles.link}>Terms</Text> and{" "}
@@ -110,6 +146,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
   },
+  error: {
+    color: "#ef4444",
+    textAlign: "center",
+    marginBottom: 8,
+    fontSize: 14,
+  },
   footerText: {
     marginTop: 16,
     fontSize: 13,
@@ -121,14 +163,13 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   switchText: {
-  marginTop: 18,
-  textAlign: "center",
-  color: "#6b7280",
-  fontSize: 14,
-},
-switchLink: {
-  color: "#4f46e5",
-  fontWeight: "600",
-},
-
+    marginTop: 18,
+    textAlign: "center",
+    color: "#6b7280",
+    fontSize: 14,
+  },
+  switchLink: {
+    color: "#4f46e5",
+    fontWeight: "600",
+  },
 });

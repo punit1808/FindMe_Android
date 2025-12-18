@@ -19,13 +19,13 @@ export default function Signup() {
   const { signup } = useAuth();
   const router = useRouter();
 
-  const [name, setName] = useState("");
+  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const submit = async () => {
 
-    // await signup(email, password);
+    await signup(fullName, email, password);
     router.push("/auth/login");
   };
 
@@ -46,8 +46,8 @@ export default function Signup() {
           <View style={styles.form}>
             <TextInput
               placeholder="Full Name"
-              value={name}
-              onChangeText={setName}
+              value={fullName}
+              onChangeText={setFullName}
               style={styles.input}
             />
 
