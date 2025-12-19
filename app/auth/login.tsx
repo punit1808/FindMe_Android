@@ -15,6 +15,8 @@ import { useState } from "react";
 import { useRouter } from "expo-router";
 import { useAuth } from "../../hooks/useAuth";
 import AuthHero from "@/components/AuthHero";
+import { requestLocationPermissions } from "../../utils/locationPermissions";
+import { startBackgroundLocation } from "../../utils/startBackgroundLocation";
 
 export default function Login() {
   const { login } = useAuth();
@@ -32,7 +34,11 @@ export default function Login() {
       setLoading(true);
       setError(null);
 
+      
       await login(email, password);
+      await requestLocationPermissions();
+      await startBackgroundLocation();
+      
       router.replace("/main/groups");
     } catch (err: any) {
       setError(

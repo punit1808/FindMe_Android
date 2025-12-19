@@ -11,32 +11,12 @@ export default function GroupsScreen() {
   const [showModal, setShowModal] = useState(false);
   const router = useRouter();
 
-  const sampleGroups = [
-    {
-      _id: "sample-1",
-      name: "College Friends",
-      members: [{}, {}, {}],
-    },
-    {
-      _id: "sample-2",
-      name: "Office Team",
-      members: [{}, {}],
-    },
-    {
-      _id: "sample-3",
-      name: "Trip to Manali",
-      members: [{}, {}, {}, {}],
-    },
-  ];
-
-  const data = groups.length > 0 ? groups : sampleGroups;
-
   if (loading) return <Loading />;
 
   return (
     <View style={{ flex: 1 }}>
       <FlatList
-        data={data}
+        data={groups}
         keyExtractor={(g) => g._id}
         renderItem={({ item }) => (
           <GroupCard
@@ -44,16 +24,17 @@ export default function GroupsScreen() {
             onPress={() =>
               router.push({
                 pathname: "/group/[groupId]",
-                params: { groupId: item._id },
+                params: { groupId: item.name, groupName: item._id },
               })
             }
-            onDelete={() => {
-              // prevent delete on sample groups
-              if (item._id.startsWith("sample")) return;
-              deleteGroup(item._id);
-            }}
+            onDelete={() => deleteGroup(item.name)}
           />
         )}
+        ListEmptyComponent={
+          <Text style={{ textAlign: "center", marginTop: 40, color: "#6b7280" }}>
+            No groups yet. Create one!
+          </Text>
+        }
         ListFooterComponent={
           <TouchableOpacity
             style={styles.addCard}
@@ -78,7 +59,7 @@ const styles = StyleSheet.create({
     margin: 16,
     padding: 20,
     borderRadius: 12,
-    backgroundColor: "#4f46e5", 
+    backgroundColor: "#4f46e5",
   },
   addText: {
     color: "#fff",

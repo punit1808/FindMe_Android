@@ -16,80 +16,47 @@ type Member = {
 };
 
 export default function MemberList({
-  members = [],
+  members,
   onRemove,
 }: {
-  members?: Member[];
+  members: Member[];
   onRemove?: (id: string) => void;
 }) {
-  // 🔹 Sample data fallback (for UI testing)
-  const sampleMembers: Member[] = [
-    {
-      _id: "1",
-      email: "jaideepy514@gmail.com",
-      role: "member",
-      lat: 30.7701383,
-      lng: 76.5760218,
-      updatedAt: "9/19/2025, 12:05:08 PM",
-    },
-    {
-      _id: "2",
-      email: "punityadav1808@gmail.com",
-      role: "member",
-      lat: 28.7278552,
-      lng: 77.1449775,
-      updatedAt: "12/13/2025, 4:08:06 PM",
-    },
-    {
-      _id: "3",
-      email: "takshakasdf@gmail.com",
-      role: "member",
-      lat: 30.7418508,
-      lng: 76.6702864,
-      updatedAt: "9/23/2025, 4:49:55 PM",
-    },
-  ];
-
-  const data = members.length > 0 ? members : sampleMembers;
-
   return (
-    <View style={styles.wrapper}>
-      
-
-      <View style={styles.card}>
-        <FlatList
-          data={data}
-          keyExtractor={(item) => item._id}
-          ItemSeparatorComponent={() => <View style={styles.divider} />}
-          renderItem={({ item }) => (
-            <View style={styles.row}>
-              <View style={{ flex: 1 }}>
-                <Text style={styles.email}>
-                  {item.email} ({item.role})
-                </Text>
-
-                <Text style={styles.location}>
-                  📍 {item.lat}, {item.lng}
-                </Text>
-              </View>
-
-              <View style={styles.right}>
-                <Text style={styles.time}>{item.updatedAt}</Text>
-
-                <TouchableOpacity
-                  style={styles.removeBtn}
-                  onPress={() => onRemove?.(item._id)}
-                >
-                  <Text style={styles.removeText}>Remove</Text>
-                </TouchableOpacity>
-              </View>
+    <View style={styles.card}>
+      <FlatList
+        data={members}
+        keyExtractor={(item) => item.email}
+        ItemSeparatorComponent={() => <View style={styles.divider} />}
+        showsVerticalScrollIndicator
+        renderItem={({ item }) => (
+          <View style={styles.row}>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.email}>
+                {item.email}
+              </Text>
+              <Text style={styles.location}>
+                📍 {item.lat}, {item.lng}
+              </Text>
             </View>
-          )}
-        />
-      </View>
+
+            <View style={styles.right}>
+              <Text style={styles.time}>{item.updatedAt}</Text>
+              <TouchableOpacity
+                style={styles.removeBtn}
+                onPress={() => onRemove?.(item.email)}
+              >
+                <Text style={styles.removeText}>Remove</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
+      />
     </View>
   );
 }
+
+
 
 const styles = StyleSheet.create({
   wrapper: {

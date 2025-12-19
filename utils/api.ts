@@ -12,6 +12,13 @@ export const api = axios.create({
 
 api.interceptors.request.use(
   async (config) => {
+    if (
+      config.url?.includes("/user/login") ||
+      config.url?.includes("/user/register")
+    ) {
+      return config;
+    }
+
     const token = await SecureStore.getItemAsync("token");
 
     if (token) {
@@ -22,3 +29,4 @@ api.interceptors.request.use(
   },
   (error) => Promise.reject(error)
 );
+

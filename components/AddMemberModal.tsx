@@ -12,33 +12,52 @@ import {
 } from "react-native";
 import { useState } from "react";
 import { api } from "../utils/api";
+import * as SecureStore from "expo-secure-store";
 
-type Role = "admin" | "member";
+type Role = "Admin" | "Member";
 
 export default function AddMemberModal({
   groupId,
+  groupName,
   visible,
   onClose,
+  onMemberAdded,
+
 }: {
   groupId: string;
+  groupName:string;
   visible: boolean;
   onClose: () => void;
+  onMemberAdded: () => void;
 }) {
   const [email, setEmail] = useState("");
-  const [role, setRole] = useState<Role>("member");
+  const [role, setRole] = useState<Role>("Member");
 
   const addMember = async () => {
-    if (!email.trim()) return;
+  if (!email.trim()) return;
 
-    await api.post(`/groups/${groupId}/members`, {
-      email: email.trim(),
-      role, // 👈 send role to backend
+  try {
+    const userId = email.trim();
+    const addedBy = await SecureStore.getItemAsync("email");
+    if (!addedBy) return;
+    
+    console.log("Adding member:", { addedBy, groupId,groupName, userId, role });
+    await api.post("/group/addUser", {
+      addedBy,
+      userId,
+      groupId,
+      role,
     });
-
+    console.log("member added successfully");
+    onMemberAdded(); 
     setEmail("");
-    setRole("member");
+    setRole("Member");
     onClose();
-  };
+  } catch (err) {
+    console.log("failed to add member", err);
+  }
+};
+
 
   return (
     <Modal visible={visible} animationType="fade" transparent>
@@ -48,10 +67,9 @@ export default function AddMemberModal({
           style={styles.overlay}
         >
           <View style={styles.modal}>
-            {/* 🏷 Title */}
+           
             <Text style={styles.title}>Add Member</Text>
 
-            {/* ✉ Email */}
             <TextInput
               placeholder="User email"
               value={email}
@@ -61,19 +79,18 @@ export default function AddMemberModal({
               keyboardType="email-address"
             />
 
-            {/* 🔐 ROLE SELECTOR */}
             <View style={styles.roleContainer}>
               <TouchableOpacity
                 style={[
                   styles.roleBtn,
-                  role === "member" && styles.roleActive,
+                  role === "Member" && styles.roleActive,
                 ]}
-                onPress={() => setRole("member")}
+                onPress={() => setRole("Member")}
               >
                 <Text
                   style={[
                     styles.roleText,
-                    role === "member" && styles.roleTextActive,
+                    role === "Member" && styles.roleTextActive,
                   ]}
                 >
                   Member
@@ -83,14 +100,14 @@ export default function AddMemberModal({
               <TouchableOpacity
                 style={[
                   styles.roleBtn,
-                  role === "admin" && styles.roleActive,
+                  role === "Admin" && styles.roleActive,
                 ]}
-                onPress={() => setRole("admin")}
+                onPress={() => setRole("Admin")}
               >
                 <Text
                   style={[
                     styles.roleText,
-                    role === "admin" && styles.roleTextActive,
+                    role === "Admin" && styles.roleTextActive,
                   ]}
                 >
                   Admin
@@ -98,7 +115,6 @@ export default function AddMemberModal({
               </TouchableOpacity>
             </View>
 
-            {/* ✅ ACTIONS */}
             <TouchableOpacity style={styles.primaryBtn} onPress={addMember}>
               <Text style={styles.primaryText}>Add Member</Text>
             </TouchableOpacity>

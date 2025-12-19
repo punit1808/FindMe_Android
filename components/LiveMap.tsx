@@ -1,45 +1,32 @@
 import { View, StyleSheet } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 
-export default function LiveMap({ groupId }: { groupId: string }) {
-  const sampleMembers = [
-    {
-      _id: "1",
-      email: "jaideepy514@gmail.com",
-      latitude: 30.7701383,
-      longitude: 76.5760218,
-    },
-    {
-      _id: "2",
-      email: "punityadav1808@gmail.com",
-      latitude: 28.7278552,
-      longitude: 77.1449775,
-    },
-    {
-      _id: "3",
-      email: "takshakasdf@gmail.com",
-      latitude: 30.7418508,
-      longitude: 76.6702864,
-    },
-  ];
+type Member = {
+  email: string;
+  lat: number;
+  lng: number;
+};
+
+export default function LiveMap({ members }: { members: Member[] }) {
+  if (!members || members.length === 0) return null;
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.container}>
       <MapView
         style={StyleSheet.absoluteFillObject}
         initialRegion={{
-          latitude: 30.7333,
-          longitude: 76.7794,
+          latitude: members[0].lat,
+          longitude: members[0].lng,
           latitudeDelta: 5,
           longitudeDelta: 5,
         }}
       >
-        {sampleMembers.map((m) => (
+        {members.map((m) => (
           <Marker
-            key={m._id}
+            key={m.email}
             coordinate={{
-              latitude: m.latitude,
-              longitude: m.longitude,
+              latitude: m.lat,
+              longitude: m.lng,
             }}
             title={m.email}
           />
@@ -48,3 +35,9 @@ export default function LiveMap({ groupId }: { groupId: string }) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});

@@ -16,7 +16,7 @@ export default function GroupCard({
         <View style={{ flex: 1 }}>
           <Text style={styles.name}>{group.name}</Text>
           <Text style={styles.meta}>
-            Members: {group.members?.length ?? 0}
+            Group ID: {group._id}
           </Text>
         </View>
 
