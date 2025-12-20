@@ -45,13 +45,40 @@ export function useAuth() {
     }
   };
 
+  const clearSession = async () => {
+    await SecureStore.deleteItemAsync("token");
+    await SecureStore.deleteItemAsync("email");
+    await SecureStore.deleteItemAsync("groupId");
+    setUser(null);
+  };
+
+
   useEffect(() => {
-    api
-      .get("/user")
-      .then((res) => setUser(res.data.user))
-      .catch(() => setUser(null))
-      .finally(() => setLoading(false));
-  }, []);
+  const restoreSession = async () => {
+    try {
+      setLoading(true);
+
+      const token = await SecureStore.getItemAsync("token");
+      const email = await SecureStore.getItemAsync("email");
+
+      if (!token || !email) {
+        await clearSession();
+        return;
+      }
+
+      const res = await api.get("/user/valid");
+
+      setUser(res.data.user);
+    } catch (err) {
+      await clearSession();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  restoreSession();
+}, []);
+
 
   return { user, loading, login, signup, logout };
 }

@@ -61,9 +61,9 @@ export default function GroupScreen() {
   return (
     <View style={styles.container}>
       {/* 🗺 MAP */}
-      {/* <View style={styles.mapContainer}>
+      <View style={styles.mapContainer}>
         <LiveMap members={members} />
-      </View> */}
+      </View>
 
       {/* 👥 HEADER */}
       <Text style={styles.heading}>Members</Text>
