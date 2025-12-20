@@ -79,7 +79,9 @@ export default function Login() {
               secureTextEntry
               placeholderTextColor="#959799ff" 
               selectionColor="#111827"
-              style={styles.input}
+              style={[styles.input,
+                 { color: "#111827" }, 
+              ]}
             />
 
             {/* ❌ ERROR MESSAGE */}

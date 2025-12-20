@@ -69,7 +69,9 @@ export default function Signup() {
               value={password}
               onChangeText={setPassword}
               secureTextEntry
-              style={styles.input}
+              style={[styles.input,
+                { color: "#111827" },
+              ]}
               placeholderTextColor="#959799ff" 
               selectionColor="#111827"
             />
