@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import * as SecureStore from "expo-secure-store";
 import { api } from "../utils/api";
+import * as Location from "expo-location";
+import { LOCATION_TASK_NAME } from "../tasks/locationTask";
+
 
 export function useAuth() {
   const [user, setUser] = useState<any>(null);
@@ -23,8 +26,23 @@ export function useAuth() {
   };
 
   const logout = async () => {
-    await api.post("/logout");
-    setUser(null);
+    try {
+
+      const started = await Location.hasStartedLocationUpdatesAsync(
+        LOCATION_TASK_NAME
+      );
+      if (started) {
+        await Location.stopLocationUpdatesAsync(LOCATION_TASK_NAME);
+      }
+
+      await SecureStore.deleteItemAsync("token");
+      await SecureStore.deleteItemAsync("email");
+      await SecureStore.deleteItemAsync("groupId");
+
+      setUser(null);
+    } finally {
+      
+    }
   };
 
   useEffect(() => {

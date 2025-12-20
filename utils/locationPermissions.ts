@@ -1,13 +1,19 @@
 import * as Location from "expo-location";
+import { Platform } from "react-native";
 
 export async function requestLocationPermissions() {
   const fg = await Location.requestForegroundPermissionsAsync();
-  if (fg.status !== "granted") {
-    throw new Error("Foreground location permission denied");
+  if (!fg.granted) {
+    return false;
   }
 
-  const bg = await Location.requestBackgroundPermissionsAsync();
-  if (bg.status !== "granted") {
-    console.warn("Background permission denied (foreground still works)");
+  if (Platform.OS === "android") {
+    const bg = await Location.requestBackgroundPermissionsAsync();
+    
+    if (!bg.granted) {
+      console.warn("Background permission denied");
+    }
   }
+
+  return true;
 }

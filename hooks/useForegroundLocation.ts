@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import * as Location from "expo-location";
 import { api } from "../utils/api";
+import * as secureStore from "expo-secure-store";
 
 export function useForegroundLocation(enabled: boolean) {
   useEffect(() => {
@@ -13,15 +14,21 @@ export function useForegroundLocation(enabled: boolean) {
         {
           accuracy: Location.Accuracy.High,
           timeInterval: 5000,    
-          distanceInterval: 10,    
+          distanceInterval: 0,    
         },
         async (loc) => {
           const { latitude, longitude } = loc.coords;
-
-          await api.post("/user/live", {
-            latitude,
-            longitude,
+          const userId = await secureStore.getItemAsync("email");
+          
+          const lat = latitude;
+          const lng = longitude;
+          console.log("Foreground location update:", {userId, lat, lng });
+          await api.post("/location/update", {
+            userId,
+            lat,
+            lng,
           });
+          console.log("Foreground location sent to server");
         }
       );
     };

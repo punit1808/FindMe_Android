@@ -44,8 +44,6 @@ export function useGroup(groupId: string,groupName: string) {
     if (!groupId) return;
 
     fetchMembers();
-
-    fetchMembers();
   }, [groupId]);
 
   return { members, setMembers, loading, refresh: fetchMembers  };

@@ -15,6 +15,7 @@ import AddMemberModal from "../../components/AddMemberModal";
 
 import { useGroup } from "../../hooks/useGroup";
 import { useWebSocket } from "../../hooks/useSocket";
+import {useForegroundLocation} from "../../hooks/useForegroundLocation";
 
 export default function GroupScreen() {
   // grpId --> actual GrpName and grpName --> actual grpId
@@ -22,6 +23,7 @@ export default function GroupScreen() {
   const [showAddMember, setShowAddMember] = useState(false);
 
   if (!groupId) return null;
+  useForegroundLocation(true);
 
   // 🔹 Initial HTTP fetch
   const { members, setMembers, loading, refresh } = useGroup(groupId,groupName);

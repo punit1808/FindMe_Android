@@ -1,17 +1,36 @@
 import { View, FlatList, TouchableOpacity, Text, StyleSheet } from "react-native";
+import { useEffect, useRef } from "react";
 import { useState } from "react";
 import { useRouter } from "expo-router";
 import { useGroups } from "../../hooks/useGroups";
 import GroupCard from "../../components/GroupCard";
 import AddGroupModal from "../../components/AddGroupModal";
 import Loading from "../../components/Loading";
+import { requestLocationPermissions } from "../../utils/locationPermissions";
+import { startBackgroundLocation } from "../../utils/startBackgroundLocation";
 
 export default function GroupsScreen() {
   const { groups, loading, createGroup, deleteGroup } = useGroups();
   const [showModal, setShowModal] = useState(false);
   const router = useRouter();
+  const startedRef = useRef(false);
+
+  useEffect(() => {
+    const initLocation = async () => {
+      if (startedRef.current) return;
+
+      const granted = await requestLocationPermissions();
+      if (!granted) return;
+
+      await startBackgroundLocation();
+      startedRef.current = true;
+    };
+
+    initLocation();
+  }, []);
 
   if (loading) return <Loading />;
+
 
   return (
     <View style={{ flex: 1 }}>
