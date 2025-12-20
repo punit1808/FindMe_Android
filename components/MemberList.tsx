@@ -5,6 +5,9 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
+import * as Clipboard from "expo-clipboard";
+import { Alert } from "react-native";
+
 
 type Member = {
   _id: string;
@@ -22,6 +25,12 @@ export default function MemberList({
   members: Member[];
   onRemove?: (id: string) => void;
 }) {
+    const copyCoordinates = async (lat: number, lng: number) => {
+    const text = `${lat}, ${lng}`;
+    await Clipboard.setStringAsync(text);
+    Alert.alert("Copied", "Coordinates copied to clipboard");
+  };
+
   return (
     <View style={styles.card}>
       <FlatList
@@ -35,9 +44,18 @@ export default function MemberList({
               <Text style={styles.email}>
                 {item.email}
               </Text>
-              <Text style={styles.location}>
-                📍 {item.lat}, {item.lng}
-              </Text>
+              <View style={styles.locationRow}>
+                <Text style={styles.location}>
+                  📍 {item.lat}, {item.lng}
+                </Text>
+
+                <TouchableOpacity
+                  onPress={() => copyCoordinates(item.lat, item.lng)}
+                  style={styles.copyBtn}
+                >
+                  <Text style={styles.copyText}>Copy</Text>
+                </TouchableOpacity>
+              </View>
             </View>
 
             <View style={styles.right}>
@@ -109,4 +127,24 @@ const styles = StyleSheet.create({
     backgroundColor: "#e5e7eb",
     marginHorizontal: 14,
   },
+  locationRow: {
+  flexDirection: "row",
+  alignItems: "center",
+  marginTop: 4,
+},
+
+copyBtn: {
+  marginLeft: 8,
+  paddingHorizontal: 8,
+  paddingVertical: 2,
+  borderRadius: 6,
+  backgroundColor: "#e5e7eb",
+},
+
+copyText: {
+  fontSize: 12,
+  color: "#111827",
+  fontWeight: "500",
+},
+
 });

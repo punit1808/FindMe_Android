@@ -68,7 +68,12 @@ export function useAuth() {
 
       const res = await api.get("/user/valid");
 
-      setUser(res.data.user);
+      if(res.data !== true){
+        await clearSession();
+        return;
+      }
+
+      setUser({authenicated: true, email });
     } catch (err) {
       await clearSession();
     } finally {

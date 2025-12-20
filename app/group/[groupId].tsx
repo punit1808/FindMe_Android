@@ -61,9 +61,9 @@ export default function GroupScreen() {
   return (
     <View style={styles.container}>
       {/* 🗺 MAP */}
-      <View style={styles.mapContainer}>
+      {/* <View style={styles.mapContainer}>
         <LiveMap members={members} />
-      </View>
+      </View> */}
 
       {/* 👥 HEADER */}
       <Text style={styles.heading}>Members</Text>
@@ -104,11 +104,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  mapContainer: {
-    height: 450,
-    width: "100%",
-  },
-
   heading: {
     marginTop: 12,
     fontSize: 20,
@@ -117,7 +112,7 @@ const styles = StyleSheet.create({
   },
 
   membersContainer: {
-    maxHeight: 180,
+    maxHeight: 500,
   },
 
   addMember: {
