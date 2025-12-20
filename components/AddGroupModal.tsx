@@ -47,6 +47,8 @@ export default function AddGroupModal({
               value={name}
               onChangeText={setName}
               style={styles.input}
+              placeholderTextColor="#959799ff" 
+              selectionColor="#111827"
             />
 
             {/* 🔘 Actions */}

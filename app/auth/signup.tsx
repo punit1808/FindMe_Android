@@ -49,6 +49,8 @@ export default function Signup() {
               value={fullName}
               onChangeText={setFullName}
               style={styles.input}
+              placeholderTextColor="#959799ff" 
+              selectionColor="#111827"
             />
 
             <TextInput
@@ -58,6 +60,8 @@ export default function Signup() {
               style={styles.input}
               autoCapitalize="none"
               keyboardType="email-address"
+              placeholderTextColor="#959799ff" 
+              selectionColor="#111827"
             />
 
             <TextInput
@@ -66,6 +70,8 @@ export default function Signup() {
               onChangeText={setPassword}
               secureTextEntry
               style={styles.input}
+              placeholderTextColor="#959799ff" 
+              selectionColor="#111827"
             />
 
             <TouchableOpacity style={styles.button} onPress={submit}>

@@ -77,6 +77,8 @@ export default function AddMemberModal({
               style={styles.input}
               autoCapitalize="none"
               keyboardType="email-address"
+              placeholderTextColor="#959799ff" 
+              selectionColor="#111827"
             />
 
             <View style={styles.roleContainer}>
