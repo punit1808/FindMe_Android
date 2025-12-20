@@ -22,8 +22,8 @@ export default function GroupScreen() {
   const { groupId,groupName } = useLocalSearchParams<{ groupId: string, groupName: string }>();
   const [showAddMember, setShowAddMember] = useState(false);
 
+  useForegroundLocation(!!groupId);
   if (!groupId) return null;
-  useForegroundLocation(true);
 
   // 🔹 Initial HTTP fetch
   const { members, setMembers, loading, refresh } = useGroup(groupId,groupName);
@@ -50,7 +50,6 @@ export default function GroupScreen() {
 };
 
 
-  // 🔹 WebSocket: live updates only
   useWebSocket(groupName, setMembers);
 
   if (loading) {

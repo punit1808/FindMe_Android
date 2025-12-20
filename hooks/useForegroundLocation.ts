@@ -13,7 +13,7 @@ export function useForegroundLocation(enabled: boolean) {
       subscription = await Location.watchPositionAsync(
         {
           accuracy: Location.Accuracy.High,
-          timeInterval: 5000,    
+          timeInterval: 2000,    
           distanceInterval: 0,    
         },
         async (loc) => {

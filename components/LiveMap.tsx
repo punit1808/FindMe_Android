@@ -8,20 +8,28 @@ type Member = {
 };
 
 export default function LiveMap({ members }: { members: Member[] }) {
-  if (!members || members.length === 0) return null;
+  const validMembers = members.filter(
+    m =>
+      typeof m.lat === "number" &&
+      typeof m.lng === "number" &&
+      !Number.isNaN(m.lat) &&
+      !Number.isNaN(m.lng)
+  );
+
+  if (validMembers.length === 0) return null;
 
   return (
     <View style={styles.container}>
       <MapView
         style={StyleSheet.absoluteFillObject}
         initialRegion={{
-          latitude: members[0].lat,
-          longitude: members[0].lng,
+          latitude: validMembers[0].lat,
+          longitude: validMembers[0].lng,
           latitudeDelta: 5,
           longitudeDelta: 5,
         }}
       >
-        {members.map((m) => (
+        {validMembers.map((m) => (
           <Marker
             key={m.email}
             coordinate={{
@@ -35,6 +43,7 @@ export default function LiveMap({ members }: { members: Member[] }) {
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
