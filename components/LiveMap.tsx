@@ -1,6 +1,6 @@
 import { View, StyleSheet, Text } from "react-native";
 import MapView, { Marker } from "react-native-maps";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const DELHI_REGION = {
   latitude: 28.6139,
@@ -10,66 +10,77 @@ const DELHI_REGION = {
 };
 
 export default function LiveMap({ members }) {
-  const initialRegionRef = useRef<any>(DELHI_REGION);
-  const [ready, setReady] = useState(false);
+  const [region, setRegion] = useState<any | null>(DELHI_REGION);
+  const [mapReady, setMapReady] = useState(false);
 
-  // Update initial region ONCE when first valid location appears
+  // 🔒 Compute valid members safely
+  const validMembers = useMemo(
+    () =>
+      members.filter(
+        m =>
+          typeof m.lat === "number" &&
+          typeof m.lng === "number" &&
+          !Number.isNaN(m.lat) &&
+          !Number.isNaN(m.lng)
+      ),
+    [members]
+  );
+
+  // 🔑 Update region ONCE when first valid location arrives
   useEffect(() => {
-    const firstValid = members.find(
-      m =>
-        typeof m.lat === "number" &&
-        typeof m.lng === "number" &&
-        !Number.isNaN(m.lat) &&
-        !Number.isNaN(m.lng)
-    );
+    if (!validMembers.length) return;
 
-    if (firstValid && initialRegionRef.current === DELHI_REGION) {
-      initialRegionRef.current = {
-        latitude: firstValid.lat,
-        longitude: firstValid.lng,
+    setRegion(prev => {
+      if (
+        prev &&
+        prev.latitude === validMembers[0].lat &&
+        prev.longitude === validMembers[0].lng
+      ) {
+        return prev;
+      }
+
+      return {
+        latitude: validMembers[0].lat,
+        longitude: validMembers[0].lng,
         latitudeDelta: 5,
         longitudeDelta: 5,
       };
-    }
-  }, [members]);
+    });
+  }, [validMembers]);
+
+  // 🚫 DO NOT RENDER MAP UNTIL REGION EXISTS
+  if (!region) return null;
 
   return (
     <View style={styles.container}>
       <MapView
         style={StyleSheet.absoluteFillObject}
-        initialRegion={initialRegionRef.current}
-        onMapReady={() => setReady(true)}
+        region={region}              // ✅ SAFE
+        onMapReady={() => setMapReady(true)}
+        provider="google"            // 🔥 IMPORTANT FOR ANDROID
+        showsUserLocation={false}
+        showsMyLocationButton={false}
       >
-        {ready &&
-          members
-            .filter(
-              m =>
-                typeof m.lat === "number" &&
-                typeof m.lng === "number" &&
-                !Number.isNaN(m.lat) &&
-                !Number.isNaN(m.lng)
-            )
-            .map(m => (
-              <Marker
-                key={m.email}
-                coordinate={{
-                  latitude: m.lat,
-                  longitude: m.lng,
-                }}
-                title={m.email}
-              />
-            ))}
+        {mapReady &&
+          validMembers.map(m => (
+            <Marker
+              key={m.email}
+              coordinate={{
+                latitude: m.lat,
+                longitude: m.lng,
+              }}
+              title={m.email}
+            />
+          ))}
       </MapView>
 
-      {/* Optional UX hint */}
-      {members.length > 0 &&
-        members.every(m => m.lat == null || m.lng == null) && (
-          <View style={styles.overlay}>
-            <Text style={styles.text}>
-              Waiting for location updates…
-            </Text>
-          </View>
-        )}
+      {validMembers.length === 0 && (
+        <View style={styles.overlay}>
+          <Text style={styles.text}>
+            Waiting for location updates…
+          </Text>
+        </View>
+      )}
     </View>
   );
 }
