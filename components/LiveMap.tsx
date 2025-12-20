@@ -1,6 +1,7 @@
 import { View, StyleSheet } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 
+import { useMemo } from "react";
 type Member = {
   email: string;
   lat: number;
@@ -16,18 +17,23 @@ export default function LiveMap({ members }: { members: Member[] }) {
       !Number.isNaN(m.lng)
   );
 
+   const region = useMemo(() => {
+    if (validMembers.length === 0) return null;
+    return {
+      latitude: validMembers[0].lat,
+      longitude: validMembers[0].lng,
+      latitudeDelta: 5,
+      longitudeDelta: 5,
+    };
+  }, [validMembers]);
+  if (!region) return null;
   if (validMembers.length === 0) return null;
 
   return (
     <View style={styles.container}>
       <MapView
         style={StyleSheet.absoluteFillObject}
-        initialRegion={{
-          latitude: validMembers[0].lat,
-          longitude: validMembers[0].lng,
-          latitudeDelta: 5,
-          longitudeDelta: 5,
-        }}
+        region = {region}
       >
         {validMembers.map((m) => (
           <Marker
