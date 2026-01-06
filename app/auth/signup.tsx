@@ -39,10 +39,8 @@ export default function Signup() {
           keyboardShouldPersistTaps="handled"
           contentContainerStyle={{ flexGrow: 1 }}
         >
-          {/* 🔵 Hero Section */}
           <AuthHero />
 
-          {/* 🧾 Form */}
           <View style={styles.form}>
             <TextInput
               placeholder="Full Name"
@@ -80,7 +78,6 @@ export default function Signup() {
               <Text style={styles.buttonText}>Sign Up</Text>
             </TouchableOpacity>
 
-            {/* 🔁 SWITCH TO LOGIN */}
             <TouchableOpacity onPress={() => router.push("/auth/login")}>
               <Text style={styles.switchText}>
                 Already have an account?{" "}
@@ -110,7 +107,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   button: {
-    backgroundColor: "#4f46e5", // ✅ STANDARD COLOR
+    backgroundColor: "#4f46e5",
     paddingVertical: 14,
     borderRadius: 10,
     alignItems: "center",

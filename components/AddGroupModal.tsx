@@ -24,7 +24,7 @@ export default function AddGroupModal({
   const [name, setName] = useState("");
 
   const handleCreate = () => {
-    if (!name.trim()) return; // prevent empty group
+    if (!name.trim()) return; 
     onCreate(name.trim());
     setName("");
     onClose();
@@ -38,10 +38,9 @@ export default function AddGroupModal({
           style={styles.overlay}
         >
           <View style={styles.modal}>
-            {/* 🏷 Title */}
+      
             <Text style={styles.title}>Create Group</Text>
 
-            {/* ✏ Input */}
             <TextInput
               placeholder="Group name"
               value={name}
@@ -51,7 +50,6 @@ export default function AddGroupModal({
               selectionColor="#111827"
             />
 
-            {/* 🔘 Actions */}
             <TouchableOpacity style={styles.primaryBtn} onPress={handleCreate}>
               <Text style={styles.primaryText}>Create</Text>
             </TouchableOpacity>

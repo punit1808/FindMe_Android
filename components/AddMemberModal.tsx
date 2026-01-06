@@ -158,7 +158,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 
-  /* 🔐 Role styles */
   roleContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -186,7 +185,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
 
-  /* 🔘 Buttons */
   primaryBtn: {
     backgroundColor: "#4f46e5", 
     paddingVertical: 14,

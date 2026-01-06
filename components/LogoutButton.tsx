@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   text: {
-    color: "#dc2626", // red logout
+    color: "#dc2626",
     fontWeight: "600",
     fontSize: 14,
   },

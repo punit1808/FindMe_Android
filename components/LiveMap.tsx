@@ -13,7 +13,6 @@ export default function LiveMap({ members }) {
   const [region, setRegion] = useState<any | null>(DELHI_REGION);
   const [mapReady, setMapReady] = useState(false);
 
-  // 🔒 Compute valid members safely
   const validMembers = useMemo(
     () =>
       members.filter(
@@ -26,7 +25,6 @@ export default function LiveMap({ members }) {
     [members]
   );
 
-  // 🔑 Update region ONCE when first valid location arrives
   useEffect(() => {
     if (!validMembers.length) return;
 
@@ -48,16 +46,15 @@ export default function LiveMap({ members }) {
     });
   }, [validMembers]);
 
-  // 🚫 DO NOT RENDER MAP UNTIL REGION EXISTS
   if (!region) return null;
 
   return (
     <View style={styles.container}>
       <MapView
         style={StyleSheet.absoluteFillObject}
-        region={region}              // ✅ SAFE
+        region={region}          
         onMapReady={() => setMapReady(true)}
-        provider="google"            // 🔥 IMPORTANT FOR ANDROID
+        provider="google"        
         showsUserLocation={false}
         showsMyLocationButton={false}
       >

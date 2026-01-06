@@ -56,10 +56,8 @@ export default function Login() {
           keyboardShouldPersistTaps="handled"
           contentContainerStyle={{ flexGrow: 1 }}
         >
-          {/* 🔵 Hero Section */}
           <AuthHero />
 
-          {/* 🧾 Form */}
           <View style={styles.form}>
             <TextInput
               placeholder="Email"
@@ -84,10 +82,7 @@ export default function Login() {
               ]}
             />
 
-            {/* ❌ ERROR MESSAGE */}
             {error && <Text style={styles.error}>{error}</Text>}
-
-            {/* ✅ LOGIN BUTTON */}
             <TouchableOpacity
               style={[
                 styles.button,
@@ -103,7 +98,6 @@ export default function Login() {
               )}
             </TouchableOpacity>
 
-            {/* 🔁 SWITCH TO SIGNUP */}
             <TouchableOpacity
               onPress={() => router.push("/auth/signup")}
               disabled={loading}
@@ -114,7 +108,6 @@ export default function Login() {
               </Text>
             </TouchableOpacity>
 
-            {/* 📜 FOOTER */}
             <Text style={styles.footerText}>
               By continuing you agree to our{" "}
               <Text style={styles.link}>Terms</Text> and{" "}

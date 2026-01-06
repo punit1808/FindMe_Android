@@ -23,7 +23,6 @@ export default function GroupScreen() {
 
   if (!groupId) return null;
 
-  // 🔹 Initial HTTP fetch
   const { members, setMembers, loading, refresh } = useGroup(groupId,groupName);
 
  
@@ -60,20 +59,18 @@ export default function GroupScreen() {
 
   return (
     <View style={styles.container}>
-      {/* 🗺 MAP */}
+      {/*  MAP */}
       {/* <View style={styles.mapContainer}>
         <LiveMap members={members} />
       </View> */}
 
-      {/* 👥 HEADER */}
+ 
       <Text style={styles.heading}>Members</Text>
 
-      {/* 👥 LIST (FlatList handles scrolling) */}
       <View style={styles.membersContainer}>
         <MemberList members={members} onRemove={handleRemoveMember}/>
       </View>
-
-      {/* ➕ ADD MEMBER */}
+ 
       <TouchableOpacity
         style={styles.addMember}
         onPress={() => setShowAddMember(true)}
@@ -81,7 +78,6 @@ export default function GroupScreen() {
         <Text style={styles.addText}>Add Member</Text>
       </TouchableOpacity>
 
-      {/* ➕ MODAL */}
       <AddMemberModal
         groupId={groupId}
         groupName={groupName}
