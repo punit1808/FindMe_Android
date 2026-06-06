@@ -21,9 +21,11 @@ type Member = {
 export default function MemberList({
   members,
   onRemove,
+  onSelect
 }: {
   members: Member[];
   onRemove?: (id: string) => void;
+  onSelect?: (member: Member) => void;
 }) {
     const copyCoordinates = async (lat: number, lng: number) => {
     const text = `${lat}, ${lng}`;
@@ -41,9 +43,13 @@ export default function MemberList({
         renderItem={({ item }) => (
           <View style={styles.row}>
             <View style={{ flex: 1 }}>
-              <Text style={styles.email}>
-                {item.email}
-              </Text>
+              <TouchableOpacity
+                  onPress={() => onSelect?.(item)}
+                >
+                  <Text style={styles.clickableEmail}>
+                    {item.email}
+                  </Text>
+                </TouchableOpacity>
               <View style={styles.locationRow}>
                 <Text style={styles.location}>
                   📍 {item.lat}, {item.lng}
@@ -145,6 +151,12 @@ copyText: {
   fontSize: 12,
   color: "#111827",
   fontWeight: "500",
+},
+clickableEmail: {
+  fontSize: 14,
+  fontWeight: "600",
+  color: "#2563eb",
+  textDecorationLine: "underline",
 },
 
 });
