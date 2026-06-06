@@ -20,6 +20,7 @@ export default function GroupScreen() {
   // grpId --> actual GrpName and grpName --> actual grpId
   const { groupId,groupName } = useLocalSearchParams<{ groupId: string, groupName: string }>();
   const [showAddMember, setShowAddMember] = useState(false);
+  const [selectedMember, setSelectedMember] = useState(null);
 
   if (!groupId) return null;
 
@@ -60,15 +61,15 @@ export default function GroupScreen() {
   return (
     <View style={styles.container}>
       {/*  MAP */}
-      {/* <View style={styles.mapContainer}>
-        <LiveMap members={members} />
-      </View> */}
+      <View style={styles.mapContainer}>
+        <LiveMap members={members} selectedMember={selectedMember} />
+      </View>
 
  
       <Text style={styles.heading}>Members</Text>
 
       <View style={styles.membersContainer}>
-        <MemberList members={members} onRemove={handleRemoveMember}/>
+        <MemberList members={members} onRemove={handleRemoveMember}  onSelect={setSelectedMember}/>
       </View>
  
       <TouchableOpacity
@@ -109,6 +110,9 @@ const styles = StyleSheet.create({
 
   membersContainer: {
     maxHeight: 500,
+  },
+    mapContainer: {
+    flex: 1,
   },
 
   addMember: {

@@ -1,22 +1,27 @@
 import { View, StyleSheet, Text } from "react-native";
 import MapView, { Marker } from "react-native-maps";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 
 const DELHI_REGION = {
   latitude: 28.6139,
-  longitude: 77.2090,
+  longitude: 77.209,
   latitudeDelta: 5,
   longitudeDelta: 5,
 };
 
-export default function LiveMap({ members }) {
+export default function LiveMap({
+  members,
+  selectedMember,
+}) {
   const [region, setRegion] = useState<any | null>(DELHI_REGION);
   const [mapReady, setMapReady] = useState(false);
+
+  const mapRef = useRef<MapView>(null);
 
   const validMembers = useMemo(
     () =>
       members.filter(
-        m =>
+        (m) =>
           typeof m.lat === "number" &&
           typeof m.lng === "number" &&
           !Number.isNaN(m.lat) &&
@@ -28,7 +33,7 @@ export default function LiveMap({ members }) {
   useEffect(() => {
     if (!validMembers.length) return;
 
-    setRegion(prev => {
+    setRegion((prev) => {
       if (
         prev &&
         prev.latitude === validMembers[0].lat &&
@@ -46,20 +51,36 @@ export default function LiveMap({ members }) {
     });
   }, [validMembers]);
 
+  useEffect(() => {
+    if (!selectedMember) return;
+    if (!mapRef.current) return;
+
+    mapRef.current.animateToRegion(
+      {
+        latitude: selectedMember.lat,
+        longitude: selectedMember.lng,
+        latitudeDelta: 0.005,
+        longitudeDelta: 0.005,
+      },
+      1000
+    );
+  }, [selectedMember]);
+
   if (!region) return null;
 
   return (
     <View style={styles.container}>
       <MapView
+        ref={mapRef}
         style={StyleSheet.absoluteFillObject}
-        region={region}          
+        initialRegion={region}
         onMapReady={() => setMapReady(true)}
-        provider="google"        
+        provider="google"
         showsUserLocation={false}
         showsMyLocationButton={false}
       >
         {mapReady &&
-          validMembers.map(m => (
+          validMembers.map((m) => (
             <Marker
               key={m.email}
               coordinate={{
@@ -83,7 +104,10 @@ export default function LiveMap({ members }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
+  container: {
+    flex: 1,
+  },
+
   overlay: {
     position: "absolute",
     bottom: 16,
@@ -93,6 +117,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 8,
   },
+
   text: {
     color: "#fff",
     textAlign: "center",

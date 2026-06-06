@@ -1,50 +1,230 @@
-# Welcome to your Expo app 👋
+# Find ME 📍
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Find ME is a real-time group location-sharing mobile application built with Expo and React Native. Users can create groups, invite members, share live locations, and view member locations on an interactive map.
 
-## Get started
+## Features
 
-1. Install dependencies
+* Real-time location sharing
+* Group creation and management
+* Add and remove group members
+* Live map displaying all group members
+* Background location tracking
+* WebSocket-based live location updates
+* Copy member coordinates
+* Focus map on a selected member's location
+* Android APK builds using Expo EAS
 
-   ```bash
-   npm install
-   ```
+---
 
-2. Start the app
+## Tech Stack
 
-   ```bash
-   npx expo start
-   ```
+### Frontend
 
-In the output, you'll find options to open the app in a
+* React Native
+* Expo
+* Expo Router
+* React Native Maps
+* Expo Location
+* Expo Task Manager
+* Expo Secure Store
+* WebSockets
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+### Backend
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+* Spring Boot
+* WebSocket/STOMP
+* REST APIs
 
-## Get a fresh project
+---
 
-When you're ready, run:
+## Prerequisites
+
+Before running the application, ensure you have:
+
+* Node.js (18+ recommended)
+* npm or yarn
+* Expo CLI
+* EAS CLI
+* Android device or emulator
+* Backend server running
+
+Verify installations:
 
 ```bash
-npm run reset-project
+node -v
+npm -v
+npx expo --version
+eas --version
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+---
 
-## Learn more
+## Clone Repository
 
-To learn more about developing your project with Expo, look at the following resources:
+```bash
+git clone <repository-url>
+cd <repository-name>
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+---
 
-## Join the community
+## Install Dependencies
 
-Join our community of developers creating universal apps.
+```bash
+npm install
+```
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+or
+
+```bash
+yarn
+```
+
+---
+
+## Environment Configuration
+
+Create a `.env` file in the project root.
+
+Example:
+
+```env
+EXPO_PUBLIC_API_URL=http://YOUR_BACKEND_URL
+EXPO_PUBLIC_WS_URL=ws://YOUR_BACKEND_URL/ws
+EXPO_PUBLIC_GOOGLE_MAPS_API_KEY=YOUR_GOOGLE_MAPS_API_KEY
+```
+
+Replace the values with your own configuration.
+
+---
+
+## Running the Application
+
+Start Expo:
+
+```bash
+npx expo start
+```
+
+For Android:
+
+```bash
+npx expo run:android
+```
+
+Or scan the QR code using Expo Go.
+
+---
+
+## Background Location Permissions
+
+The application requires:
+
+* Foreground Location Permission
+* Background Location Permission
+
+When launching the application for the first time, grant all requested permissions.
+
+Without location permissions, real-time tracking will not function.
+
+---
+
+## Project Structure
+
+```text
+app/
+ ├── group/
+ ├── auth/
+ └── tabs/
+
+components/
+ ├── LiveMap.tsx
+ ├── MemberList.tsx
+ ├── GroupCard.tsx
+ └── AddMemberModal.tsx
+
+hooks/
+ ├── useGroup.ts
+ ├── useGroups.ts
+ └── useSocket.ts
+
+utils/
+ ├── api.ts
+ ├── startBackgroundLocation.ts
+ └── locationPermissions.ts
+```
+
+---
+
+## Building APK Using Expo
+
+Preview APK build:
+
+```bash
+eas build --platform android --profile preview
+```
+
+The generated APK can be downloaded from the Expo build dashboard.
+
+Production build:
+
+```bash
+eas build --platform android --profile production
+```
+
+---
+
+## Useful Commands
+
+Start development server:
+
+```bash
+npx expo start
+```
+
+Check project health:
+
+```bash
+npx expo doctor
+```
+
+View Expo configuration:
+
+```bash
+npx expo config --type public
+```
+
+Check logged-in Expo account:
+
+```bash
+eas whoami
+```
+
+---
+
+## Troubleshooting
+
+### Location not updating
+
+* Verify location permissions are granted
+* Ensure GPS is enabled
+* Confirm backend server is running
+* Verify WebSocket endpoint is reachable
+
+### Map not loading
+
+* Verify Google Maps API key is configured
+* Check internet connectivity
+* Ensure react-native-maps is installed correctly
+
+### Unable to connect to backend
+
+* Verify API URL configuration
+* Ensure backend service is running
+* Check firewall/network restrictions
+
+---
+
+## License
+
+This project is intended for educational and demonstration purposes.
